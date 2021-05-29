@@ -23,6 +23,7 @@ namespace FileManager
             backButton.Click += BackButton_Click;
             forwardButton.Click += ForwardButton_Click;
             upButton.Click += UpButton_Click;
+            refreshButton.Click += RefreshButton_Click;
             ((ListViewPanel)rightPanel).listView.MouseClick += ListView_MouseClick;
             ((TreeViewPanel)leftPanel).GetTreeView().NodeMouseClick += treeViewPanel_NodeMouseClick;
             fileViewSplitContainer.Panel1.Controls.Add(leftPanel);
@@ -30,6 +31,11 @@ namespace FileManager
             model.OnChangeDirectory += UpdatePathBar;
             model.OnChangeDirectory += UpdateRightPanel;
             model.CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        }
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            model.Refresh();
         }
 
         private void UpButton_Click(object sender, EventArgs e)

@@ -1,8 +1,9 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace FileManager
 {
-    abstract class FileViewPanel : Panel
+    abstract class FileViewPanel : Panel, IObserver<string>
     {
         protected ImageList ImgList { get; private set; }
         protected FileViewPanel()
@@ -28,5 +29,20 @@ namespace FileManager
 
         }
         public abstract void Build();
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(string value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

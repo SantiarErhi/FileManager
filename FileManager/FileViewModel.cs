@@ -5,12 +5,10 @@ using System.Windows.Forms;
 
 namespace FileManager
 {
-    class FileViewModel : IObservable<string>, IIterable<string>
+    class FileViewModel : IIterable<string>
     {
         private string _currentDirectory;
         private List<string> moveHistory = new List<string>();
-
-        private List<IObserver<string>> observers = new List<IObserver<string>>();
 
         private int pointer;
 
@@ -51,11 +49,6 @@ namespace FileManager
             pointer = -1;
         }
         #region Iterator
-        public IDisposable Subscribe(IObserver<string> observer)
-        {
-            observers.Add(observer);
-            return new Unsubscriber(observers, observer);
-        }
 
         public void MoveNext()
         {
@@ -101,28 +94,6 @@ namespace FileManager
         {
             pointer = 0;
         }
-        #endregion
-
-        #region Observer
-        private class Unsubscriber : IDisposable
-        {
-            private List<IObserver<string>> _observers;
-            private IObserver<string> _observer;
-
-            public Unsubscriber(List<IObserver<string>> observers, IObserver<string> observer)
-            {
-                this._observers = observers;
-                this._observer = observer;
-            }
-
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-            }
-        }
-
-
         #endregion
 
     }
