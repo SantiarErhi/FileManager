@@ -64,6 +64,7 @@ namespace FileManager
             fileViewSplitContainer.Panel2.Controls.Clear();
             fileViewSplitContainer.Panel2.Controls.Add(rightPanel);
             UpdateRightPanel();
+            ((AbstractListView)rightPanel).listView.MouseClick += ListView_MouseClick;
         }
         private void ListViewButton_Click(object sender, System.EventArgs e)
         {

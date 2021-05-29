@@ -279,7 +279,7 @@ namespace FileManager
             this.Controls.Add(this.contentPanel);
             this.Controls.Add(this.toolBar);
             this.Name = "FileManagerForm";
-            this.Text = "Form1";
+            this.Text = "FileManager";
             this.toolBar.ResumeLayout(false);
             this.toolBar.PerformLayout();
             this.contentPanel.ResumeLayout(false);
