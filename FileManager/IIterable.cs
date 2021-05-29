@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace FileManager
 {
-    interface Interface1
+    interface IIterable<T>
     {
+        void MoveNext();
+        void MovePrevious();
+        bool HasNext();
+        bool HasPrevious();
+        void Reset();
+
     }
 }

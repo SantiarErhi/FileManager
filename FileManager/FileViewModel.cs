@@ -5,16 +5,34 @@ using System.Windows.Forms;
 
 namespace FileManager
 {
-    class FileViewModel : IObservable<string>
+    class FileViewModel : IObservable<string>, IIterable<string>
     {
         private string _currentDirectory;
-        private List<IObserver<string>> observers;
+        private List<string> moveHistory = new List<string>();
+
+        private List<IObserver<string>> observers = new List<IObserver<string>>();
+
+        private int pointer;
+
         public event Action OnChangeDirectory;
-        public string currentDirectory { get { return _currentDirectory; } set
+        public string CurrentDirectory
+        {
+            get { return _currentDirectory; }
+            set
             {
                 if (Directory.Exists(value))
                 {
                     _currentDirectory = value;
+                    if (pointer < moveHistory.Count - 1)
+                    {
+                        moveHistory[pointer + 1] = _currentDirectory;
+                        pointer++;
+                    }
+                    else
+                    {
+                        moveHistory.Add(_currentDirectory);
+                        pointer++;
+                    }
                     if (OnChangeDirectory != null)
                     {
                         OnChangeDirectory.Invoke();
@@ -24,6 +42,68 @@ namespace FileManager
 
             }
         }
+        public void Refresh()
+        {
+            OnChangeDirectory.Invoke();
+        }
+        public FileViewModel()
+        {
+            pointer = -1;
+        }
+        #region Iterator
+        public IDisposable Subscribe(IObserver<string> observer)
+        {
+            observers.Add(observer);
+            return new Unsubscriber(observers, observer);
+        }
+
+        public void MoveNext()
+        {
+            if (HasNext())
+            {
+                _currentDirectory = moveHistory[pointer+1];
+                pointer++;
+                OnChangeDirectory.Invoke();
+
+            }
+            else
+            {
+                MessageBox.Show("Has not next item");
+            }
+        }
+        
+
+        public void MovePrevious()
+        {
+            if (HasPrevious())
+            {
+                _currentDirectory = moveHistory[--pointer];
+                OnChangeDirectory.Invoke();
+
+            }
+            else
+            {
+                MessageBox.Show("Has not previous item");
+            }
+        }
+
+        public bool HasNext()
+        {
+            return pointer < moveHistory.Count - 1;
+        }
+
+        public bool HasPrevious()
+        {
+            return pointer > 0;
+        }
+
+        public void Reset()
+        {
+            pointer = 0;
+        }
+        #endregion
+
+        #region Observer
         private class Unsubscriber : IDisposable
         {
             private List<IObserver<string>> _observers;
@@ -41,10 +121,9 @@ namespace FileManager
                     _observers.Remove(_observer);
             }
         }
-        public IDisposable Subscribe(IObserver<string> observer)
-        {
-            observers.Add(observer);
-            return new Unsubscriber(observers, observer);
-        }
+
+
+        #endregion
+
     }
 }

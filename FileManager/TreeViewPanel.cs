@@ -9,7 +9,7 @@ namespace FileManager
         bool onlyDirectories;
         TreeView treeView;
 
-        public TreeViewPanel(bool onlyDirectories, FileViewModel model) : base(model) 
+        public TreeViewPanel(bool onlyDirectories)
         {
             this.onlyDirectories = onlyDirectories;
 

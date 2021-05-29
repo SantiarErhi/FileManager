@@ -4,11 +4,9 @@ namespace FileManager
 {
     abstract class FileViewPanel : Panel
     {
-        protected FileViewModel model;
         protected ImageList ImgList { get; private set; }
-        protected FileViewPanel(FileViewModel model)
+        protected FileViewPanel()
         {
-            this.model = model;
             
             ImgList = new ImageList();
             ImgList.Images.Add("folder", Properties.Resources.stock_folder);
