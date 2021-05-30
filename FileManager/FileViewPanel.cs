@@ -28,6 +28,7 @@ namespace FileManager
             ImgList.Images.Add("dll", Properties.Resources.dll);
 
         }
+
         public abstract void Build();
     }
 }

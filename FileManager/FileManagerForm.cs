@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
-using System.Collections;
 
 namespace FileManager
 {
@@ -9,12 +8,13 @@ namespace FileManager
     {
         FileViewModel model;
         FileViewPanel leftPanel;
-        FileViewPanel rightPanel = new ListViewPanel();
+        FileViewPanel rightPanel;
         public FileManagerForm()
         {
            InitializeComponent();
             model = new FileViewModel();
             leftPanel = new TreeViewPanel(true);
+            rightPanel = new ListViewPanel();
             leftPanel.Build();
             rightPanel.Build();
             listViewButton.Click += ListViewButton_Click;
