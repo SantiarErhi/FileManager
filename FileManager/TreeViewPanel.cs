@@ -12,7 +12,6 @@ namespace FileManager
         public TreeViewPanel(bool onlyDirectories)
         {
             this.onlyDirectories = onlyDirectories;
-
         }
 
         public override void Build()
@@ -55,11 +54,11 @@ namespace FileManager
             }
             catch (Exception ex) { }
         }
-        private void FillTreeNode(TreeNode driveNode, string path)
+        private void FillTreeNode(TreeNode treeNode, string path)
         {
             try
             {
-                driveNode.Nodes.Clear();
+                treeNode.Nodes.Clear();
                 string[] dirs;
                 string key;
                 string[] split;
@@ -97,7 +96,7 @@ namespace FileManager
                             dirNode.ImageKey = "file";
                     }
 
-                    driveNode.Nodes.Add(dirNode);
+                    treeNode.Nodes.Add(dirNode);
                 }
             }
             catch (Exception ex) {  }

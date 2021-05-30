@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections;
+
 namespace FileManager
 {
     public partial class FileManagerForm : Form
     {
         FileViewModel model;
         FileViewPanel leftPanel;
-        FileViewPanel rightPanel;
+        FileViewPanel rightPanel = new ListViewPanel();
         public FileManagerForm()
         {
-            InitializeComponent();
+           InitializeComponent();
             model = new FileViewModel();
             leftPanel = new TreeViewPanel(true);
-            rightPanel = new ListViewPanel();
             leftPanel.Build();
             rightPanel.Build();
             listViewButton.Click += ListViewButton_Click;
@@ -24,6 +25,11 @@ namespace FileManager
             forwardButton.Click += ForwardButton_Click;
             upButton.Click += UpButton_Click;
             refreshButton.Click += RefreshButton_Click;
+            fileContextMenu.Items["deleteFile"].Click += ContextFileDelete_Click;
+            directoryContextMenu.Items["openFolder"].Click += ContextOpenFolder_Click;
+            directoryContextMenu.Items["deleteFolder"].Click += ContextFolderDelete_Click;
+            listViewContextMenu.Items["createFolder"].Click += ContextCreateFolder_Click;
+            ((ListViewPanel)rightPanel).listView.MouseUp += ListView_MouseUp;
             ((ListViewPanel)rightPanel).listView.MouseClick += ListView_MouseClick;
             ((TreeViewPanel)leftPanel).GetTreeView().NodeMouseClick += treeViewPanel_NodeMouseClick;
             fileViewSplitContainer.Panel1.Controls.Add(leftPanel);
@@ -32,7 +38,63 @@ namespace FileManager
             model.OnChangeDirectory += UpdateRightPanel;
             model.CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         }
+        private void ContextCreateFolder_Click(object sender, EventArgs e)
+        {
+            int counter = 0;
+            while(Directory.Exists(model.CurrentDirectory + @"\NewFolder" + $"({counter})"))
+            {
+                counter++;
+            }
+            Directory.CreateDirectory(model.CurrentDirectory + @"\NewFolder" + $"({counter})");
+            model.Refresh();
+        }
+        private void ListView_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (((ListViewPanel)rightPanel).listView.SelectedItems.Count == 0)
+                {
+                    listViewContextMenu.Show(rightPanel, e.Location);
+                }
+            }
+        }
 
+        private void ContextFolderDelete_Click(object sender, EventArgs e)
+        {
+            if (((ListViewPanel)rightPanel).listView.SelectedItems.Count == 1)
+            {
+                if (Directory.Exists(model.CurrentDirectory + @"\" + ((ListViewPanel)rightPanel).listView.SelectedItems[0].Text))
+                {
+                    Directory.Delete(model.CurrentDirectory + @"\" + ((ListViewPanel)rightPanel).listView.SelectedItems[0].Text);
+                    model.Refresh();
+
+                }
+            }
+
+        }
+        private void ContextOpenFolder_Click(object sender, EventArgs e)
+        {
+            if (((ListViewPanel)rightPanel).listView.SelectedItems.Count == 1)
+            {
+                if (Directory.Exists(model.CurrentDirectory + @"\" + ((ListViewPanel)rightPanel).listView.SelectedItems[0].Text))
+                {
+
+                    model.CurrentDirectory = model.CurrentDirectory + @"\" + ((ListViewPanel)rightPanel).listView.SelectedItems[0].Text;
+                }
+            }
+        }
+        private void ContextFileDelete_Click(object sender, EventArgs e)
+        {
+            if (((ListViewPanel)rightPanel).listView.SelectedItems.Count == 1)
+            {
+                if (File.Exists(model.CurrentDirectory + @"\" + ((ListViewPanel)rightPanel).listView.SelectedItems[0].Text))
+                {
+                    File.Delete(model.CurrentDirectory + @"\" + ((ListViewPanel)rightPanel).listView.SelectedItems[0].Text);
+                    model.Refresh();
+
+                }
+            }
+        }
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             model.Refresh();
@@ -40,12 +102,15 @@ namespace FileManager
 
         private void UpButton_Click(object sender, EventArgs e)
         {
-            model.CurrentDirectory = Directory.GetParent(model.CurrentDirectory).FullName;
+            if (Directory.Exists(Directory.GetParent(model.CurrentDirectory).FullName))
+            {
+                model.CurrentDirectory = Directory.GetParent(model.CurrentDirectory).FullName;
+            }
         }
 
         private void ForwardButton_Click(object sender, EventArgs e)
         {
-             model.MoveNext();
+            model.MoveNext();
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -73,23 +138,16 @@ namespace FileManager
                     {
                         if (Directory.Exists(model.CurrentDirectory + @"\" + ((ListView)sender).SelectedItems[0].Text))
                         {
-                            directoryContextMenu.Show(rightPanel, new System.Drawing.Point(e.X, e.Y));
+                            directoryContextMenu.Show(rightPanel, e.Location);
+                        }
+                        if (File.Exists(model.CurrentDirectory + @"\" + ((ListView)sender).SelectedItems[0].Text))
+                        {
+                            fileContextMenu.Show(rightPanel, e.Location);
                         }
                     }
 
                     break;
             }
-        }
-
-
-        private void ChangeRightPanelView(FileViewPanel panel)
-        {
-            rightPanel = panel;
-            rightPanel.Build();
-            fileViewSplitContainer.Panel2.Controls.Clear();
-            fileViewSplitContainer.Panel2.Controls.Add(rightPanel);
-            UpdateRightPanel();
-            ((ListViewPanel)rightPanel).listView.MouseClick += ListView_MouseClick;
         }
         private void ListViewButton_Click(object sender, System.EventArgs e)
         {
@@ -118,7 +176,7 @@ namespace FileManager
         }
         private void UpdateRightPanel()
         {
-            ((ListViewPanel)rightPanel).GetContent(model.CurrentDirectory);
+            ((ListViewPanel)rightPanel).Update(model.CurrentDirectory);
         }
         private void UpdatePathBar()
         {

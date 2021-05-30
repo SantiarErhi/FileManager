@@ -20,13 +20,17 @@ namespace FileManager
         {
             Dock = DockStyle.Fill;
             listView.Dock = DockStyle.Fill;
+            listView.View = View.List;
             listView.Columns.Add("Name", 200);
             listView.SmallImageList = ImgList;
             listView.LargeImageList = ImgList;
             Controls.Add(listView);
-
         }
-        public void GetContent(string path)
+        public void Update(string path)
+        {
+            GetContent(path);
+        }
+        private void GetContent(string path)
         {
             try
             {

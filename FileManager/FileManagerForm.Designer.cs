@@ -49,9 +49,12 @@ namespace FileManager
             this.panel3 = new System.Windows.Forms.Panel();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.fileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteFile = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.open = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInNewWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.listViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.createFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.toolBar.SuspendLayout();
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileViewSplitContainer)).BeginInit();
@@ -63,7 +66,9 @@ namespace FileManager
             ((System.ComponentModel.ISupportInitialize)(this.upButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.forwardButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.backButton)).BeginInit();
+            this.fileContextMenu.SuspendLayout();
             this.directoryContextMenu.SuspendLayout();
+            this.listViewContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolBar
@@ -247,28 +252,50 @@ namespace FileManager
             // fileContextMenu
             // 
             this.fileContextMenu.AccessibleName = "";
+            this.fileContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteFile});
             this.fileContextMenu.Name = "fileContextMenu";
-            this.fileContextMenu.Size = new System.Drawing.Size(61, 4);
+            this.fileContextMenu.Size = new System.Drawing.Size(108, 26);
+            // 
+            // deleteFile
+            // 
+            this.deleteFile.Name = "deleteFile";
+            this.deleteFile.Size = new System.Drawing.Size(107, 22);
+            this.deleteFile.Text = "Delete";
             // 
             // directoryContextMenu
             // 
             this.directoryContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.open,
-            this.openInNewWindow});
+            this.openFolder,
+            this.deleteFolder});
             this.directoryContextMenu.Name = "directoryContextMenu";
-            this.directoryContextMenu.Size = new System.Drawing.Size(187, 48);
+            this.directoryContextMenu.Size = new System.Drawing.Size(138, 48);
             // 
-            // open
+            // openFolder
             // 
-            this.open.Name = "open";
-            this.open.Size = new System.Drawing.Size(186, 22);
-            this.open.Text = "Open folder";
+            this.openFolder.Name = "openFolder";
+            this.openFolder.Size = new System.Drawing.Size(137, 22);
+            this.openFolder.Text = "Open folder";
             // 
-            // openInNewWindow
+            // deleteFolder
             // 
-            this.openInNewWindow.Name = "openInNewWindow";
-            this.openInNewWindow.Size = new System.Drawing.Size(186, 22);
-            this.openInNewWindow.Text = "Open in new window";
+            this.deleteFolder.Name = "deleteFolder";
+            this.deleteFolder.Size = new System.Drawing.Size(137, 22);
+            this.deleteFolder.Text = "Delete";
+            // 
+            // listViewContextMenu
+            // 
+            this.listViewContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createFolder});
+            this.listViewContextMenu.Name = "listViewContextMenu";
+            this.listViewContextMenu.Size = new System.Drawing.Size(145, 26);
+            // 
+            // createFolder
+            // 
+            this.createFolder.Name = "createFolder";
+            this.createFolder.RightToLeftAutoMirrorImage = true;
+            this.createFolder.Size = new System.Drawing.Size(144, 22);
+            this.createFolder.Text = "Create Folder";
             // 
             // FileManagerForm
             // 
@@ -293,7 +320,9 @@ namespace FileManager
             ((System.ComponentModel.ISupportInitialize)(this.upButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.forwardButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.backButton)).EndInit();
+            this.fileContextMenu.ResumeLayout(false);
             this.directoryContextMenu.ResumeLayout(false);
+            this.listViewContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -319,10 +348,13 @@ namespace FileManager
         private System.Windows.Forms.ToolStripMenuItem detailsViewButton;
         private System.Windows.Forms.ToolStripMenuItem smallIconViewButton;
         private System.Windows.Forms.ToolStripMenuItem tileViewButton;
-        private System.Windows.Forms.ToolStripMenuItem open;
-        private System.Windows.Forms.ToolStripMenuItem openInNewWindow;
+        private System.Windows.Forms.ToolStripMenuItem openFolder;
         internal System.Windows.Forms.ContextMenuStrip fileContextMenu;
         internal System.Windows.Forms.ContextMenuStrip directoryContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem deleteFile;
+        private System.Windows.Forms.ContextMenuStrip listViewContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem deleteFolder;
+        private System.Windows.Forms.ToolStripMenuItem createFolder;
     }
 
     
